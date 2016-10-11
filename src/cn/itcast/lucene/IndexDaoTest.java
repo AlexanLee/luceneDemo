@@ -8,8 +8,8 @@ import cn.itcast.lucene.utils.File2DocumentUtils;
 
 public class IndexDaoTest {
 
-	String filePath = "/luceneDatasource/IndexWriter.txt";
-	String filePath2 = "/luceneDatasource/小笑话.txt";
+	String filePath = "/Users/lijianli/Rep/LuceneDemoSrc/luceneDatasource/IndexWriter.txt";
+	String filePath2 = "/Users/lijianli/Rep/LuceneDemoSrc/luceneDatasource/小笑话.txt";
 
 	IndexDao indexDao = new IndexDao();
 

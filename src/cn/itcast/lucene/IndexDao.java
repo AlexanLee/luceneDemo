@@ -92,7 +92,6 @@ public class IndexDao {
 			String[] fields = { "name", "content" };
 			Map<String, Float> boosts = new HashMap<String, Float>();
 			boosts.put("name", 3f);
-			// boosts.put("content", 1.0f); Ĭ��Ϊ1.0f
 
 			QueryParser queryParser = new MultiFieldQueryParser(fields, analyzer, boosts);
 			Query query = queryParser.parse(queryString);
@@ -107,14 +106,12 @@ public class IndexDao {
 		IndexSearcher indexSearcher = null;
 
 		try {
-			// 2�����в�ѯ
 			indexSearcher = new IndexSearcher(indexPath);
 			Filter filter = new RangeFilter("size", NumberTools.longToString(200)
 					, NumberTools.longToString(1000), true, true);
 
-			// ========== ����
 			Sort sort = new Sort();
-			sort.setSort(new SortField("size")); // Ĭ��Ϊ����
+			sort.setSort(new SortField("size"));
 			// sort.setSort(new SortField("size", true));
 			// ==========
 
@@ -123,7 +120,6 @@ public class IndexDao {
 			int recordCount = topDocs.totalHits;
 			List<Document> recordList = new ArrayList<Document>();
 
-			// ============== ׼��������
 			Formatter formatter = new SimpleHTMLFormatter("<font color='red'>", "</font>");
 			Scorer scorer = new QueryScorer(query);
 			Highlighter highlighter = new Highlighter(formatter, scorer);
@@ -132,21 +128,18 @@ public class IndexDao {
 			highlighter.setTextFragmenter(fragmenter);
 			// ==============
 
-			// 3��ȡ����ǰҳ������
 			int end = Math.min(firstResult + maxResults, topDocs.totalHits);
 			for (int i = firstResult; i < end; i++) {
 				ScoreDoc scoreDoc = topDocs.scoreDocs[i];
 
-				int docSn = scoreDoc.doc; // �ĵ��ڲ����
-				Document doc = indexSearcher.doc(docSn); // ���ݱ��ȡ����Ӧ���ĵ�
+				int docSn = scoreDoc.doc;
+				Document doc = indexSearcher.doc(docSn);
 
-				// =========== ����
-				// ���ظ�����Ľ���������ǰ����ֵ��û�г��ֹؼ��֣��᷵�� null
 				String hc = highlighter.getBestFragment(analyzer, "content", doc.get("content"));
 				if (hc == null) {
 					String content = doc.get("content");
 					int endIndex = Math.min(50, content.length());
-					hc = content.substring(0, endIndex);// ���ǰ50���ַ�
+					hc = content.substring(0, endIndex);
 				}
 				doc.getField("content").setValue(hc);
 				// ===========

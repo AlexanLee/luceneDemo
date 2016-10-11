@@ -31,7 +31,7 @@ public class QueryTest {
 
 	@Test
 	public void testTermQuery() {
-		Term term = new Term("name", "room");
+		Term term = new Term("name", "File");
 		Query query = new TermQuery(term);
 
 		queryAndPrintResult(query);
@@ -58,7 +58,7 @@ public class QueryTest {
 
 	@Test
 	public void testWildcardQuery() {
-		Term term = new Term("name", "roo?");
+		Term term = new Term("name", "Fil?");
 		Query query = new WildcardQuery(term);
 
 		queryAndPrintResult(query);
@@ -67,11 +67,9 @@ public class QueryTest {
 	@Test
 	public void testPhraseQuery() {
 		PhraseQuery phraseQuery = new PhraseQuery();
-		// phraseQuery.add(new Term("content", "��ʿ"), 1);
-		// phraseQuery.add(new Term("content", "����"), 4);
 
-		phraseQuery.add(new Term("content", "��ʿ"));
-		phraseQuery.add(new Term("content", "����"));
+		phraseQuery.add(new Term("content", "Fi"));
+		phraseQuery.add(new Term("content", "File"));
 		phraseQuery.setSlop(2);
 
 		queryAndPrintResult(phraseQuery);
@@ -80,8 +78,8 @@ public class QueryTest {
 	@Test
 	public void testBooleanQuery() {
 		PhraseQuery query1 = new PhraseQuery();
-		query1.add(new Term("content", "��ʿ"));
-		query1.add(new Term("content", "����"));
+		query1.add(new Term("content", "Fi"));
+		query1.add(new Term("content", "File"));
 		query1.setSlop(2);
 
 		Term lowerTerm = new Term("size", NumberTools.longToString(500));
@@ -97,16 +95,12 @@ public class QueryTest {
 
 	@Test
 	public void testQueryString() {
-		// String queryString = "+content:\"��ʿ ����\"~2 -size:[000000000000dw TO 000000000000rs]";
-		// String queryString = "content:\"��ʿ ����\"~2 AND size:[000000000000dw TO 000000000000rs]";
-		// String queryString = "content:\"��ʿ ����\"~2 OR size:[000000000000dw TO 000000000000rs]";
-		// String queryString = "(content:\"��ʿ ����\"~2 NOT size:[000000000000dw TO 000000000000rs])";
-//		String queryString = "-content:\"��ʿ ����\"~2 AND -size:[000000000000dw TO 000000000000rs]";
-//		String queryString = "-content:\"��ʿ ����\"~2 OR -size:[000000000000dw TO 000000000000rs]";
-		String queryString = "-content:\"��ʿ ����\"~2 NOT -size:[000000000000dw TO 000000000000rs]";
+//		String queryString = "-content:\"北京ʿ \"~2 AND -size:[000000000000dw TO 000000000000rs]";
+//		String queryString = "-content:\"北京ʿ \"~2 OR -size:[000000000000dw TO 000000000000rs]";
+		String queryString = "-content:\"北京ʿ \"~2 NOT -size:[000000000000dw TO 000000000000rs]";
 
 		QueryResult qr = indexDao.search(queryString, 0, 10);
-		System.out.println("�ܹ��С�" + qr.getRecordCount() + "����ƥ����");
+		System.out.println("result:" + qr.getRecordCount());
 		for (Document doc : qr.getRecordList()) {
 			File2DocumentUtils.printDocumentInfo(doc);
 		}
